@@ -11,8 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+
+      - name: Debug folder structure
+        run: ls -R
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -23,12 +25,12 @@ jobs:
 
       - name: Build with Maven
         run: mvn -B clean verify
-        working-directory: gym_backend/gym
+        working-directory: gym
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v6
         with:
-          projectBaseDir: gym_backend/gym
+          projectBaseDir: gym
           args: >
             -Dsonar.projectKey=Thirupathi-17_gym_backend
             -Dsonar.organization=thirupathi-17
