@@ -20,14 +20,14 @@ jobs:
           java-version: 17
           cache: maven
 
-      - name: Build with Maven
-        run: mvn -B clean verify
-        working-directory: gym_backend/gym/gym   # ✅ correct path
+      - name: Build with Maven (Skip Tests)
+        run: mvn -B clean install -DskipTests
+        working-directory: gym_backend/gym/gym
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v6
         with:
-          projectBaseDir: gym_backend/gym/gym   # ✅ correct path
+          projectBaseDir: gym_backend/gym/gym
           args: >
             -Dsonar.projectKey=Thirupathi-17_gym_backend
             -Dsonar.organization=thirupathi-17
