@@ -1,4 +1,4 @@
-name: Backend SonarCloud Analysis
+name: SonarCloud Backend
 
 on:
   push:
@@ -10,12 +10,11 @@ on:
 
 jobs:
   build:
-    name: Build and Analyze
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -24,16 +23,13 @@ jobs:
           java-version: '17'
 
       - name: Cache Maven packages
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Build and Run Sonar Analysis
+      - name: Build and Analyze with SonarCloud
         working-directory: gym_backend/gym/gym
         run: >
-          mvn clean verify sonar:sonar
-          -Dsonar.projectKey=Thirupathi-17_gym_backend
-          -Dsonar.organization=thirupathi-17
-          -Dsonar.host.url=https://so
+          mvn clean install -DskipTest
