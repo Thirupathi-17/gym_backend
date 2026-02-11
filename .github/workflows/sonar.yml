@@ -1,22 +1,37 @@
-name: Debug Backend Structure
+name: SonarCloud Backend
 
 on:
   push:
     branches:
       - main
+  pull_request:
 
 jobs:
-  debug:
+  sonar:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Show current directory
-        run: pwd
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
 
-      - name: Show full folder tree
-        run: ls -R
+      - name: Build with Maven
+        run: mvn -B clean verify
+        working-directory: gym_backend/gym/gym   # ✅ correct path
 
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@v6
+        with:
+          projectBaseDir: gym_backend/gym/gym   # ✅ correct path
+          args: >
+            -Dsonar.projectKey=Thirupathi-17_gym_backend
+            -Dsonar.organization=thirupathi-17
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
 
